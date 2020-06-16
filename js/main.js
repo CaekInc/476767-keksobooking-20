@@ -53,7 +53,7 @@ var createAdvert = function (i) {
 
   var advert = {
     author: {
-      avatar: 'img/avatats/user0' + i + '.png',
+      avatar: 'img/avatars/user0' + i + '.png',
     },
     offer: {
       title: TITLES [i % TITLES.length],
