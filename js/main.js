@@ -6,6 +6,8 @@ var TIME_IN_OUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 var DESCRIPTIONS = ['классная', 'просторная', 'дешевая', 'дорогая', 'средняя', 'почти норм', '7', '8'];
+var PIN_WIDTH_HALF = 25;
+var PIN_HEIGHT = 70;
 var blockMap = document.querySelector('.map');
 
 var getRandom = function (lower, upper) {
@@ -14,26 +16,6 @@ var getRandom = function (lower, upper) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-
-// for (var i = 0; i === ADVERTS_NUMBERS; i++) {
-//   var adverts = [];
-//   var createAdvert = function () {
-//     adverts[i] = {
-//       author: {
-//         avatar: 'img/avatats/user0' + i
-//       }
-//     },
-//     {
-//       offer: {
-//         title: '',
-//         address: '',
-//         price: 1,
-
-//       }
-//     },
-
-//   };
-// }
 
 var getRandomАrray = function (ceil, floor, name) {
   var length = getRandom(ceil, floor);
@@ -53,7 +35,7 @@ var createAdvert = function (i) {
 
   var advert = {
     author: {
-      avatar: 'img/avatars/user0' + i + '.png',
+      avatar: 'img/avatars/user0' + (i + 1) + '.png',
     },
     offer: {
       title: TITLES [i % TITLES.length],
@@ -100,6 +82,8 @@ var createPin = function (param) {
   var pinElement = similarPinTemplate.cloneNode(true);
   pinElement.children[0].src = param.author.avatar;
   pinElement.children[0].alt = param.offer.title;
+  pinElement.style.left = param.location.x - PIN_WIDTH_HALF + 'px';
+  pinElement.style.top = param.location.y - PIN_HEIGHT + 'px';
   return pinElement;
 };
 
