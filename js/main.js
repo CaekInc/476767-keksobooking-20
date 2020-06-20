@@ -16,16 +16,21 @@ var getRandom = function (lower, upper) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-
-var getRandomАrray = function (ceil, floor, name) {
+var getRandomSublist = function (array, ceil, floor) {
   var length = getRandom(ceil, floor);
-  var newArray = name.slice();
+  var newArray = array.slice();
 
   while (newArray.length > length) {
     newArray.splice(getRandom(ceil, newArray.length), 1);
   }
 
   return newArray;
+};
+
+
+
+var getRandomItemArray = function (array) {
+  return array[Math.floor(Math.random() * (array.length))];
 };
 
 
@@ -38,17 +43,17 @@ var createAdvert = function (i) {
       avatar: 'img/avatars/user0' + (i + 1) + '.png',
     },
     offer: {
-      title: TITLES [i % TITLES.length],
+      title: getRandomItemArray(TITLES),
       address: X + ', ' + Y,
       price: getRandom(200, 1500),
-      type: TYPES [i % TYPES.length],
+      type: getRandomItemArray(TYPES),
       rooms: getRandom(1, 4),
       guests: getRandom(1, 6),
-      checkin: TIME_IN_OUT[i % TIME_IN_OUT.length],
-      checkout: TIME_IN_OUT[i % TIME_IN_OUT.length],
-      features: getRandomАrray(0, 5, FEATURES),
+      checkin: getRandomItemArray(TIME_IN_OUT),
+      checkout: getRandomItemArray(TIME_IN_OUT),
+      features: getRandomSublist(FEATURES, 0, 5),
       description: DESCRIPTIONS[i % DESCRIPTIONS.length],
-      photos: getRandomАrray(0, 2, PHOTOS),
+      photos: getRandomSublist(PHOTOS, 0, 2),
     },
     location: {
       x: X,
@@ -67,9 +72,7 @@ var createNewAdverts = function () {
   return adverts;
 };
 
-
 var createAdverts = createNewAdverts();
-
 
 // 2
 
@@ -80,8 +83,9 @@ var similarPinTemplate = document.querySelector('#pin').content.querySelector('.
 
 var createPin = function (param) {
   var pinElement = similarPinTemplate.cloneNode(true);
-  pinElement.children[0].src = param.author.avatar;
-  pinElement.children[0].alt = param.offer.title;
+  var pinImage = pinElement.querySelector('img');
+  pinImage.src = param.author.avatar;
+  pinImage.alt = param.offer.title;
   pinElement.style.left = param.location.x - PIN_WIDTH_HALF + 'px';
   pinElement.style.top = param.location.y - PIN_HEIGHT + 'px';
   return pinElement;
