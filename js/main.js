@@ -27,7 +27,6 @@ var getRandomItemArray = function (array) {
 var createAdvert = function (i) {
   var X = getRandom(1, 1200);
   var Y = getRandom(130, 630);
-
   var advert = {
     author: {
       avatar: 'img/avatars/user0' + (i + 1) + '.png',
@@ -57,7 +56,6 @@ var createNewAdverts = function () {
   var adverts = [];
   for (var i = 0; i < ADVERTS_NUMBERS; i++) {
     adverts.push(createAdvert(i));
-
   }
   return adverts;
 };
