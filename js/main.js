@@ -9,30 +9,20 @@ var DESCRIPTIONS = ['классная', 'просторная', 'дешевая'
 var PIN_WIDTH_HALF = 25;
 var PIN_HEIGHT = 70;
 var blockMap = document.querySelector('.map');
-
+// 1 создание функций и дефолтного объявления
 var getRandom = function (lower, upper) {
   var min = Math.ceil(lower);
   var max = Math.floor(upper);
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-var getRandomSublist = function (array, ceil, floor) {
-  var length = getRandom(ceil, floor);
-  var newArray = array.slice();
-
-  while (newArray.length > length) {
-    newArray.splice(getRandom(ceil, newArray.length), 1);
-  }
-
-  return newArray;
+var getRandomSublist = function (array) {
+  return array.slice(0, Math.random() * (array.length + 1));
 };
-
-
 
 var getRandomItemArray = function (array) {
   return array[Math.floor(Math.random() * (array.length))];
 };
-
 
 var createAdvert = function (i) {
   var X = getRandom(1, 1200);
@@ -51,9 +41,9 @@ var createAdvert = function (i) {
       guests: getRandom(1, 6),
       checkin: getRandomItemArray(TIME_IN_OUT),
       checkout: getRandomItemArray(TIME_IN_OUT),
-      features: getRandomSublist(FEATURES, 0, 5),
-      description: DESCRIPTIONS[i % DESCRIPTIONS.length],
-      photos: getRandomSublist(PHOTOS, 0, 2),
+      features: getRandomSublist(FEATURES),
+      description: getRandomItemArray([DESCRIPTIONS]),
+      photos: getRandomSublist(PHOTOS),
     },
     location: {
       x: X,
@@ -74,11 +64,11 @@ var createNewAdverts = function () {
 
 var createAdverts = createNewAdverts();
 
-// 2
+// 2 удаления класса и показ карты
 
 blockMap.classList.remove('map--faded');
 
-// 3
+// 3 создание объявлений
 var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 var createPin = function (param) {
