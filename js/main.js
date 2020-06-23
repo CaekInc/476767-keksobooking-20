@@ -16,8 +16,15 @@ var getRandom = function (lower, upper) {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
-var getRandomSublist = function (array) {
-  return array.slice(0, Math.random() * (array.length + 1));
+var getRandomSublist = function (array, ceil, floor) {
+  var length = getRandom(ceil, floor);
+  var newArray = array.slice();
+
+  while (newArray.length > length) {
+    newArray.splice(getRandom(newArray[0], newArray.length), 1);
+  }
+
+  return newArray;
 };
 
 var getRandomItemArray = function (array) {
@@ -40,9 +47,9 @@ var createAdvert = function (i) {
       guests: getRandom(1, 6),
       checkin: getRandomItemArray(TIME_IN_OUT),
       checkout: getRandomItemArray(TIME_IN_OUT),
-      features: getRandomSublist(FEATURES),
+      features: getRandomSublist(FEATURES, 0, 5),
       description: getRandomItemArray([DESCRIPTIONS]),
-      photos: getRandomSublist(PHOTOS),
+      photos: getRandomSublist(PHOTOS, 0, 2),
     },
     location: {
       x: X,
