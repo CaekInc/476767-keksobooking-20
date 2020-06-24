@@ -21,7 +21,7 @@ var getRandomSublist = function (array, ceil, floor) {
   var newArray = array.slice();
 
   while (newArray.length > length) {
-    newArray.splice(getRandom(newArray[0], newArray.length), 1);
+    newArray.splice(getRandom(0, newArray.length), 1);
   }
 
   return newArray;
