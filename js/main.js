@@ -48,7 +48,7 @@ var createAdvert = function (i) {
       checkin: getRandomItemArray(TIME_IN_OUT),
       checkout: getRandomItemArray(TIME_IN_OUT),
       features: getRandomSublist(FEATURES, 0, 5),
-      description: getRandomItemArray([DESCRIPTIONS]),
+      description: getRandomItemArray(DESCRIPTIONS),
       photos: getRandomSublist(PHOTOS, 0, 2),
     },
     location: {
