@@ -69,10 +69,6 @@ var createNewAdverts = function () {
 
 var createAdverts = createNewAdverts();
 
-// 2 удаления класса и показ карты
-
-blockMap.classList.remove('map--faded');
-
 // 3 создание объявлений
 var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
@@ -91,4 +87,58 @@ for (var i = 0; i < createAdverts.length; i++) {
   fragment.appendChild(createPin(createAdverts[i]));
 }
 
-blockMap.appendChild(fragment);
+// blockMap.appendChild(fragment);
+
+// убираем активные состояния input
+
+var advertForm = document.querySelector('.ad-form');
+var advertFormInputs = advertForm.querySelectorAll('input');
+var adverFormFieldsets = advertForm.querySelectorAll('fieldset');
+var advertPin = document.querySelector('.map__pin--main');
+var addressInput = document.querySelector('#address');
+
+var disableInputs = function (whatNeedDisable) {
+  for (var advertFormInput of whatNeedDisable) {
+    advertFormInput.setAttribute('disabled', true);
+  }
+};
+disableInputs(advertFormInputs);
+disableInputs(adverFormFieldsets);
+
+// поиск адресса
+var findAddress = function (pin) {
+  var height = pin.style.top.replace(/[^-0-9]/gim,'');
+  var width = pin.style.left.replace(/[^-0-9]/gim,'');
+  addressInput.value = (+height + PIN_HEIGHT) + ', ' + (Number(width) + Number(PIN_WIDTH_HALF));
+};
+
+//  включаем активные состояния
+var enableInputs = function (enable) {
+  for (var advertFormInput of enable) {
+    advertFormInput.removeAttribute('disabled');
+  }
+};
+
+var enableForm = function () {
+  enableInputs(advertFormInputs);
+  enableInputs(adverFormFieldsets);
+  blockMap.classList.remove('map--faded');
+  advertForm.classList.remove('ad-form--disabled');
+  findAddress(advertPin);
+};
+
+
+advertPin.addEventListener('mousedown', function (evt) {
+  if (evt.button === 0 ) {
+    enableForm();
+  }
+});
+
+advertPin.addEventListener('keydown', function (evt) {
+  if (evt.key === 'Enter') {
+    enableForm();
+  }
+});
+
+// валидация формы
+
