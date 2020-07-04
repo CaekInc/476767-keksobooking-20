@@ -142,3 +142,29 @@ advertPin.addEventListener('keydown', function (evt) {
 
 // валидация формы
 
+var inputTimeIn = document.querySelector('#timein');
+var inputTimeOut = document.querySelector('#timeout');
+
+// связываем инпуты на вьезд и выезд
+inputTimeIn.addEventListener('change', function () {
+  inputTimeOut.value = inputTimeIn.value;
+});
+inputTimeOut.addEventListener('change', function () {
+  inputTimeIn.value = inputTimeOut.value;
+});
+// ограничваем цену за ночь
+
+var typeOfHouse = document.querySelector('#type');
+var priceByNight = document.querySelector('#price');
+
+typeOfHouse.addEventListener('change', function () {
+  if (typeOfHouse.value === 'bungalo') {
+    priceByNight.min = 0;
+  } else if (typeOfHouse.value === 'flat') {
+    priceByNight.min = 1000;
+  } else if (typeOfHouse.value === 'house') {
+    priceByNight.min = 5000;
+  } else if (typeOfHouse.value === 'palace') {
+    priceByNight.min = 10000;
+  }
+});
