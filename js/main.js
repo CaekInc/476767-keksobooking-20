@@ -168,3 +168,25 @@ typeOfHouse.addEventListener('change', function () {
     priceByNight.min = 10000;
   }
 });
+
+// ограничиваем количество комнат и гостей
+
+var roomNumber = document.querySelector('#room_number');
+var roomCapacity = document.querySelector('#capacity');
+var roomCapacityOptions = roomCapacity.querySelectorAll('option');
+var changeRoom = function () {
+  var roomChoice = +roomNumber.value;
+  for (var i = 0; i < roomCapacityOptions.length; i++) {
+    var guestsOption = roomCapacity.options[i];
+    var guestsValue = +guestsOption.value;
+    guestsOption.setAttribute('disabled' , true);
+
+    if (roomChoice === 100 && guestsValue === 0) {
+      guestsOption.removeAttribute('disabled');
+    } else if (roomChoice !== 100 && roomChoice >= guestsValue && guestsValue !== 0) {
+      guestsOption.removeAttribute('disabled');
+    }
+  }
+  roomCapacity.value = roomCapacity.querySelector('option:not([disabled])').value;
+};
+roomNumber.addEventListener('change', changeRoom);
