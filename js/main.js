@@ -97,27 +97,39 @@ var adverFormFieldsets = advertForm.querySelectorAll('fieldset');
 var advertPin = document.querySelector('.map__pin--main');
 var addressInput = document.querySelector('#address');
 
-var disableInputs = function (whatNeedDisable) {
-  for (var advertFormInput of whatNeedDisable) {
-    advertFormInput.setAttribute('disabled', true);
-  }
+// var disableInputs = function (whatNeedDisable) {
+//   for (var advertFormInput of whatNeedDisable) {
+//     advertFormInput.setAttribute('disabled', true);
+//   }
+// };
+var disableInputs = function (input) {
+  input.forEach(function (item) {
+    item.setAttribute('disabled', true);
+  });
 };
+
 disableInputs(advertFormInputs);
 disableInputs(adverFormFieldsets);
 
 // поиск адресса
 var findAddress = function (pin) {
-  var height = pin.style.top.replace(/[^-0-9]/gim,'');
-  var width = pin.style.left.replace(/[^-0-9]/gim,'');
+  var height = pin.style.top.replace(/[^-0-9]/gim, '');
+  var width = pin.style.left.replace(/[^-0-9]/gim, '');
   addressInput.value = (+height + PIN_HEIGHT) + ', ' + (Number(width) + Number(PIN_WIDTH_HALF));
 };
 
 //  включаем активные состояния
-var enableInputs = function (enable) {
-  for (var advertFormInput of enable) {
-    advertFormInput.removeAttribute('disabled');
-  }
+// var enableInputs = function (enable) {
+//   for (var advertFormInput of enable) {
+//     advertFormInput.removeAttribute('disabled');
+//   }
+// };
+var enableInputs = function (input) {
+  input.forEach(function (item) {
+    item.removeAttribute('disabled');
+  });
 };
+
 
 var enableForm = function () {
   enableInputs(advertFormInputs);
@@ -129,7 +141,7 @@ var enableForm = function () {
 
 
 advertPin.addEventListener('mousedown', function (evt) {
-  if (evt.button === 0 ) {
+  if (evt.button === 0) {
     enableForm();
   }
 });
@@ -179,7 +191,7 @@ var changeRoom = function () {
   for (var i = 0; i < roomCapacityOptions.length; i++) {
     var guestsOption = roomCapacity.options[i];
     var guestsValue = +guestsOption.value;
-    guestsOption.setAttribute('disabled' , true);
+    guestsOption.setAttribute('disabled', true);
 
     if (roomChoice === 100 && guestsValue === 0) {
       guestsOption.removeAttribute('disabled');
