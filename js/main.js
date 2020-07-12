@@ -92,7 +92,7 @@ for (var i = 0; i < createAdverts.length; i++) {
 // убираем активные состояния input
 
 var advertForm = document.querySelector('.ad-form');
-var advertFormInputs = advertForm.querySelectorAll('input');
+var inputs = advertForm.querySelectorAll('input');
 var adverFormFieldsets = advertForm.querySelectorAll('fieldset');
 var advertPin = document.querySelector('.map__pin--main');
 var addressInput = document.querySelector('#address');
@@ -108,7 +108,7 @@ var disableInputs = function (input) {
   });
 };
 
-disableInputs(advertFormInputs);
+disableInputs(inputs);
 disableInputs(adverFormFieldsets);
 
 // поиск адресса
@@ -132,7 +132,7 @@ var enableInputs = function (input) {
 
 
 var enableForm = function () {
-  enableInputs(advertFormInputs);
+  enableInputs(inputs);
   enableInputs(adverFormFieldsets);
   blockMap.classList.remove('map--faded');
   advertForm.classList.remove('ad-form--disabled');
@@ -202,3 +202,8 @@ var changeRoom = function () {
   roomCapacity.value = roomCapacity.querySelector('option:not([disabled])').value;
 };
 roomNumber.addEventListener('change', changeRoom);
+
+var fixRoomNumber = function (number) {
+  roomNumber.value = number;
+};
+fixRoomNumber(3);
