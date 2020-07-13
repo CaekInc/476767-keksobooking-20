@@ -188,7 +188,7 @@ var roomCapacity = document.querySelector('#capacity');
 var roomCapacityOptions = roomCapacity.querySelectorAll('option');
 var changeRoom = function () {
   var roomChoice = +roomNumber.value;
-  for (var i = 0; i < roomCapacityOptions.length; i++) {
+  for (i = 0; i < roomCapacityOptions.length; i++) {
     var guestsOption = roomCapacity.options[i];
     var guestsValue = +guestsOption.value;
     guestsOption.setAttribute('disabled', true);
@@ -202,8 +202,3 @@ var changeRoom = function () {
   roomCapacity.value = roomCapacity.querySelector('option:not([disabled])').value;
 };
 roomNumber.addEventListener('change', changeRoom);
-
-var fixRoomNumber = function (number) {
-  roomNumber.value = number;
-};
-fixRoomNumber(3);
