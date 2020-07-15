@@ -102,8 +102,8 @@ var addressInput = document.querySelector('#address');
 //     advertFormInput.setAttribute('disabled', true);
 //   }
 // };
-var disableInputs = function (input) {
-  input.forEach(function (item) {
+var disableInputs = function (inputsForDisable) {
+  inputsForDisable.forEach(function (item) {
     item.setAttribute('disabled', true);
   });
 };
