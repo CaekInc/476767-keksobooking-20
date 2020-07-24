@@ -31,11 +31,11 @@
       item.removeAttribute('disabled');
     });
   };
-  document.utils = {
+  window.utils = {
     getRandom: getRandom,
     getRandomSublist: getRandomSublist,
     getRandomItemArray: getRandomItemArray,
     disableInputs: disableInputs,
     enableInputs: enableInputs
-  }
+  };
 })();
