@@ -1,14 +1,16 @@
 'use strict';
 (function () {
-  var blockMap = document.querySelector('.map');
-  var fragment = document.createDocumentFragment();
-  for (var i = 0; i < window.data.createAdverts.length; i++) {
-    fragment.appendChild(window.card.createPin(window.data.createAdverts[i]));
-  }
-  var addFragment = function () {
-    blockMap.appendChild(fragment);
+  var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+  var createPin = function (param) {
+    var pinElement = similarPinTemplate.cloneNode(true);
+    var pinImage = pinElement.querySelector('img');
+    pinImage.src = param.author.avatar;
+    pinImage.alt = param.offer.title;
+    pinElement.style.left = param.location.x - window.data.PIN_WIDTH_HALF + 'px';
+    pinElement.style.top = param.location.y - window.data.PIN_HEIGHT + 'px';
+    return pinElement;
   };
   window.pin = {
-    addFragment: addFragment
+    create: createPin
   };
 })();

@@ -48,6 +48,6 @@
   };
 
   var createAdverts = createNewAdverts();
-  window.data.createAdverts = createAdverts;
+  window.data.adverts = createAdverts;
 
 })();
