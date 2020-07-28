@@ -60,8 +60,8 @@
     HEIGHT: 65,
     FULL_HEIGHT: 78
   };
-  var pinsXRange = [pinData.WIDTH / 2, BlockMap.offsetWidth - pinData.WIDTH / 2];
-  var pinsYRange = [pinData.Y[0] + pinData.HEIGHT, pinData.Y[1] + pinData.HEIGHT];
+  // var pinsXRange = [pinData.WIDTH / 2, BlockMap.offsetWidth - pinData.WIDTH / 2];
+  // var pinsYRange = [pinData.Y[0] + pinData.HEIGHT, pinData.Y[1] + pinData.HEIGHT];
   var OffersData = {
     TITLES: ['Заголовок 1', 'Заголовок 2', 'Заголовок 4', 'Заголовок 5', 'Заголовок 6', 'Заголовок 7', 'Заголовок 8'],
     PRICE: [500, 100000],

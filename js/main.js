@@ -24,5 +24,5 @@
   mainPin.addEventListener('keydown', enablePage);
   window.main = {
     disablePage: disablePage
-  }
+  };
 })();

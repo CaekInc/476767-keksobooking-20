@@ -84,7 +84,7 @@
   };
   roomNumber.addEventListener('change', changeRoom);
 
-  var disableForm = function() {
+  var disableForm = function () {
     advertForm.classList.add('ad-form--disabled');
     window.utils.disableInputs(inputs);
     addressInput.value = window.mainPin.getPosition();
