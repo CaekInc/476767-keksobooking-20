@@ -31,11 +31,22 @@
       item.removeAttribute('disabled');
     });
   };
+  var getClosestElement = function (element, selector) {
+    while (element) {
+      if (element.matches(selector)) {
+        return element;
+      } else {
+        element = element.parentElement;
+      }
+    }
+    return null;
+  };
   window.utils = {
     getRandom: getRandom,
     getRandomSublist: getRandomSublist,
     getRandomItemArray: getRandomItemArray,
     disableInputs: disableInputs,
-    enableInputs: enableInputs
+    enableInputs: enableInputs,
+    getClosestElement: getClosestElement
   };
 })();
