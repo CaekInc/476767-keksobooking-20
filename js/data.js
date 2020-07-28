@@ -12,7 +12,7 @@
     PIN_HEIGHT: 70,
   };
 
-  var BlockMap = document.querySelector('.map');
+  // var BlockMap = document.querySelector('.map');
   var createAdvert = function (i) {
     var X = window.utils.getRandom(1, 1200);
     var Y = window.utils.getRandom(130, 630);
