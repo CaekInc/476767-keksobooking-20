@@ -48,6 +48,19 @@
   };
 
   var createAdverts = createNewAdverts();
+  var pinData = {
+    COUNT: 8,
+    WIDTH: 50,
+    HEIGHT: 70,
+    Y: [130, 630]
+  };
+  var mainPinData = {
+    WIDTH: 65,
+    HEIGHT: 65,
+    FULL_HEIGHT: 78
+  };
   window.data.adverts = createAdverts;
+  window.data.pinData = pinData;
+  window.data.mainPinData = mainPinData;
 
 })();
