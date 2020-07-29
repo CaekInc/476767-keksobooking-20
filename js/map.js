@@ -8,7 +8,7 @@
   var addFragment = function (items) {
     offers = items;
     var count = offers.length;
-    var maxCount = window.data.PinData.COUNT;
+    var maxCount = window.data.pinData.COUNT;
     var pinsCount = count <= maxCount ? count : maxCount;
     var pins = document.createDocumentFragment();
 
@@ -25,11 +25,16 @@
       children[i].remove();
     }
   };
+  var updatePins = function (filteredOffers) {
+    closeCard();
+    removePins();
+    addFragment(filteredOffers);
+  };
 
   var loadOffers = function () {
     var onLoad = function (response) {
       offers = response;
-      addFragment();
+      callback(offers);
     };
 
   var onError = function (errorMessage) {
@@ -41,7 +46,7 @@
 
   window.backend.load(onLoad, onError);
 };
-var addCardToMap = function (currentIndex) {
+var addCard = function (currentIndex) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < offers.length; i++) {
     if (i.toString() === currentIndex) {
@@ -59,10 +64,10 @@ var addCardToMap = function (currentIndex) {
       var currentPopupId = currentPopup.getAttribute('data-id');
       currentPopup.remove();
       if (currentPopupId !== offerId) {
-        addCardToMap(offerId);
+        addCard(offerId);
       }
     } else {
-      addCardToMap(offerId);
+      addCard(offerId);
     }
   };
 
@@ -90,8 +95,7 @@ var addCardToMap = function (currentIndex) {
   };
 
   var init = function () {
-    loadOffers();
-    window.utils.enableInputs(mapFilterElements);
+    loadOffers(window.filterForm.init);
     blockMap.classList.remove('map--faded');
     blockMap.addEventListener('click', onMapEvent);
     blockMap.addEventListener('keydown', onMapEvent);
@@ -100,8 +104,8 @@ var addCardToMap = function (currentIndex) {
   var destroy = function () {
     removePins(window.dataItem);
     closeCard();
-    filterForm.reset();
-    window.utils.disableInputs(mapFilterElements);
+    window.filterForm.destroy();
+    // window.utils.disableInputs(mapFilterElements);
     blockMap.classList.add('map--faded');
     blockMap.removeEventListener('click', onMapEvent);
     blockMap.removeEventListener('keydown', onMapEvent);
@@ -109,6 +113,7 @@ var addCardToMap = function (currentIndex) {
 
   window.map = {
     init: init,
-    destroy: destroy
+    destroy: destroy,
+    updatePins: updatePins
   };
 })();
