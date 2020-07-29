@@ -1,36 +1,43 @@
 'use strict';
+
 (function () {
-  var getRandom = function (lower, upper) {
-    var min = Math.ceil(lower);
-    var max = Math.floor(upper);
-    return Math.floor(Math.random() * (max - min)) + min;
+  var ERROR_TIMEOUT = 5000;
+  var DEBOUNCE_TIMEOUT = 500;
+  var MOUSE_LEFT_BUTTON = 0;
+  var KeyCode = {
+    ENTER: 13,
+    ESCAPE: 27
   };
 
-  var getRandomSublist = function (array, ceil, floor) {
-    var length = getRandom(ceil, floor);
-    var newArray = array.slice();
+  var popupContainer = document.querySelector('main');
+  var popup;
 
-    while (newArray.length > length) {
-      newArray.splice(getRandom(0, newArray.length), 1);
-    }
-
-    return newArray;
+  var isEnterPressed = function (evt) {
+    return evt.keyCode === KeyCode.ENTER;
   };
 
-  var getRandomItemArray = function (array) {
-    return array[Math.floor(Math.random() * (array.length))];
+  var isEscapePressed = function (evt) {
+    return evt.keyCode === KeyCode.ESCAPE;
   };
 
-  var disableInputs = function (inputsForDisable) {
-    inputsForDisable.forEach(function (item) {
-      item.setAttribute('disabled', true);
-    });
+  var isMouseLeftClicked = function (evt) {
+    return evt.button === MOUSE_LEFT_BUTTON;
   };
-  var enableInputs = function (input) {
-    input.forEach(function (item) {
-      item.removeAttribute('disabled');
-    });
+
+  var debounce = function (callback) {
+    var lastTimeout = null;
+
+    return function () {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+
+      lastTimeout = window.setTimeout(function () {
+        callback.apply(null, arguments);
+      }, DEBOUNCE_TIMEOUT);
+    };
   };
+
   var getClosestElement = function (element, selector) {
     while (element) {
       if (element.matches(selector)) {
@@ -41,12 +48,56 @@
     }
     return null;
   };
+
+  var disableFormElements = function (elements) {
+    elements.forEach(function (element) {
+      element.setAttribute('disabled', 'true');
+    });
+  };
+
+  var enableFormElements = function (elements) {
+    elements.forEach(function (element) {
+      element.removeAttribute('disabled');
+    });
+  };
+
+  var showErrorNotification = function (text) {
+    var error = document.createElement('div');
+    error.style = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background:#ff5635; padding: 10px 50px; color: white; font-size: 20px; margin-bottom: 10px; border-radius: 5px;';
+    error.textContent = text;
+    document.body.insertAdjacentElement('afterEnd', error);
+    setTimeout(function () {
+      error.remove();
+    }, ERROR_TIMEOUT);
+  };
+
+  var onCloseClick = function () {
+    popup.remove();
+  };
+
+  var onCloseKeydown = function (evt) {
+    if (window.utils.isEscapePressed(evt)) {
+      popup.remove();
+      document.body.removeEventListener('keydown', onCloseKeydown);
+    }
+  };
+
+  var showPopup = function (template) {
+    popup = template;
+    popupContainer.insertAdjacentElement('afterbegin', popup);
+    popup.addEventListener('click', onCloseClick);
+    document.body.addEventListener('keydown', onCloseKeydown);
+  };
+
   window.utils = {
-    getRandom: getRandom,
-    getRandomSublist: getRandomSublist,
-    getRandomItemArray: getRandomItemArray,
-    disableInputs: disableInputs,
-    enableInputs: enableInputs,
-    getClosestElement: getClosestElement
+    isEnterPressed: isEnterPressed,
+    isEscapePressed: isEscapePressed,
+    isMouseLeftClicked: isMouseLeftClicked,
+    debounce: debounce,
+    getClosestElement: getClosestElement,
+    disableFormElements: disableFormElements,
+    enableFormElements: enableFormElements,
+    showErrorNotification: showErrorNotification,
+    showPopup: showPopup
   };
 })();

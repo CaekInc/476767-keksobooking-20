@@ -1,114 +1,137 @@
 'use strict';
+
 (function () {
-  var blockMap = document.querySelector('.map');
+  var MAX_PINS_COUNT = 5;
+
+  var map = document.querySelector('.map');
   var mapPinsList = document.querySelector('.map__pins');
   var mapFilterContainer = document.querySelector('.map__filters-container');
   var offers = [];
 
-  var addFragment = function (items) {
-    offers = items;
-    var count = offers.length;
-    var maxCount = window.data.pinData.COUNT;
-    var pinsCount = count <= maxCount ? count : maxCount;
+  var addPinsToMap = function () {
     var pins = document.createDocumentFragment();
+    var pinsCount = Math.min(offers.length, MAX_PINS_COUNT);
 
-    for (var i = 0; i < pinsCount; i++) {
-      pins.appendChild(window.pin.create(items[i], i));
-    }
+    offers.slice(0, pinsCount).forEach(function (offer, i) {
+      pins.appendChild(window.pin.create(offer, i));
+    });
 
     mapPinsList.appendChild(pins);
+    initPinsHandlers();
   };
 
-  var removePins = function () {
-    var children = mapPinsList.querySelectorAll('button.map__pin:not(.map__pin--main)')
-    for (var i = 0; i < children.length; i++) {
-      children[i].remove();
-    }
+  var getPinsElements = function () {
+    return mapPinsList.querySelectorAll('.map__pin:not(.map__pin--main)');
   };
+
+  var removePinsFromMap = function () {
+    var pins = getPinsElements();
+
+    pins.forEach(function (pin) {
+      pin.remove();
+    });
+  };
+
+  var initPinsHandlers = function () {
+    var pins = getPinsElements();
+
+    pins.forEach(function (pin) {
+      pin.addEventListener('click', function (evt) {
+        var pinBtn = window.utils.getClosestElement(evt.target, '.map__pin:not(.map__pin--main)');
+        var offerId = pinBtn.getAttribute('data-id');
+        openCard(offerId);
+      });
+    });
+  };
+
   var updatePins = function (filteredOffers) {
+    offers = filteredOffers;
     closeCard();
-    removePins();
-    addFragment(filteredOffers);
+    removePinsFromMap();
+    addPinsToMap();
   };
 
-  var loadOffers = function () {
+  var loadOffers = function (callback) {
     var onLoad = function (response) {
       offers = response;
       callback(offers);
     };
 
-  var onError = function (errorMessage) {
-    var node = document.createElement('div');
-    node.style = 'text-align: center; background-color: rgba(255, 86, 53, 0.7); color: white; font-size: 20px; padding: 10px; margin: 0 0 20px;';
-    node.textContent = errorMessage;
-    mapFilterContainer.insertAdjacentElement('afterbegin', node);
+    window.backend.load(onLoad, window.utils.showErrorNotification);
   };
 
-  window.backend.load(onLoad, onError);
-};
-var addCard = function (currentIndex) {
-  var fragment = document.createDocumentFragment();
-  for (var i = 0; i < offers.length; i++) {
-    if (i.toString() === currentIndex) {
-      fragment.appendChild(window.card.renderCard(offers[i], currentIndex));
-      break;
-    }
-  }
-  blockMap.insertBefore(fragment, mapFilterContainer);
-};
+  var addCardToMap = function (id, callback) {
+    var fragment = document.createDocumentFragment();
 
+    for (var i = 0; i < offers.length; i++) {
+      if (i.toString() === id) {
+        fragment.appendChild(window.card.create(offers[i], id));
+        break;
+      }
+    }
+
+    map.insertBefore(fragment, mapFilterContainer);
+    callback();
+  };
+
+  var onDocumentClick = function (evt) {
+    if (window.utils.isEscapePressed(evt)) {
+      closeCard();
+    }
+  };
+
+  var initCardHandlers = function () {
+    var btnClosePopup = map.querySelector('.popup__close');
+
+    btnClosePopup.addEventListener('click', function () {
+      closeCard();
+    });
+
+    btnClosePopup.addEventListener('keydown', function (evt) {
+      if (window.utils.isEnterPressed(evt)) {
+        closeCard();
+      }
+    });
+
+    document.addEventListener('keydown', onDocumentClick);
+  };
 
   var openCard = function (offerId) {
-    var currentPopup = document.querySelector('.map .map__card');
-    if (currentPopup) {
-      var currentPopupId = currentPopup.getAttribute('data-id');
-      currentPopup.remove();
-      if (currentPopupId !== offerId) {
-        addCard(offerId);
+    var currentCard = document.querySelector('.map .map__card');
+
+    if (currentCard) {
+      var currentCardId = currentCard.getAttribute('data-id');
+      currentCard.remove();
+
+      if (currentCardId !== offerId) {
+        addCardToMap(offerId, initCardHandlers);
       }
     } else {
-      addCard(offerId);
+      addCardToMap(offerId, initCardHandlers);
     }
   };
 
   var closeCard = function () {
-    var currentPopup = document.querySelector('.map .map__card');
-    if (currentPopup) {
-      currentPopup.remove();
-    }
-  };
+    var currentCard = document.querySelector('.map .map__card');
 
-  var onMapEvent = function (evt) {
-    var targetElement = evt.target;
-    var pinBtn = window.utils.getClosestElement(targetElement, '.map__pin:not(.map__pin--main)');
-
-    if (pinBtn && evt.type !== 'keydown') {
-      var offerId = pinBtn.getAttribute('data-id');
-      openCard(offerId);
-    }
-
-    var isBtnClosePopup = targetElement.matches('.popup__close');
-    var isBtnEsc = evt.key === 'Escape' ? true : false;
-    if (isBtnClosePopup || isBtnEsc) {
-      closeCard(evt, targetElement);
+    if (currentCard) {
+      currentCard.remove();
+      document.removeEventListener('keydown', onDocumentClick);
     }
   };
 
   var init = function () {
+    window.mainPin.init();
     loadOffers(window.filterForm.init);
-    blockMap.classList.remove('map--faded');
-    blockMap.addEventListener('click', onMapEvent);
-    blockMap.addEventListener('keydown', onMapEvent);
+    map.classList.remove('map--faded');
   };
 
   var destroy = function () {
-    removePins(window.dataItem);
+    removePinsFromMap();
     closeCard();
+    window.mainPin.reset();
     window.filterForm.destroy();
-    // window.utils.disableInputs(mapFilterElements);
-    blockMap.classList.add('map--faded');
-    blockMap.removeEventListener('click', onMapEvent);
-    blockMap.removeEventListener('keydown', onMapEvent);
+    map.classList.add('map--faded');
   };
 
   window.map = {
