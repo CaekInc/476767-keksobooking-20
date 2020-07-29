@@ -14,10 +14,13 @@
   var maxXPosition = 0;
 
   var getPinPosition = function (isFullHeigth) {
-    var pinHeight = isFullHeigth ? window.data.mainPinData.FULL_HEIGHT : window.data.mainPinData.HEIGHT / 2;
+    var pinHeight = isFullHeigth ? window.data.mainPinData.FULL_HEIGHT : Math.round(window.data.mainPinData.HEIGHT / 2);
     return (mainPin.offsetLeft + Math.round(window.data.mainPinData.WIDTH / 2)) + ', ' + (mainPin.offsetTop + pinHeight);
   };
-
+  var setToStart = function () {
+    mainPin.style.left = '570px';
+    mainPin.style.top = '375px';
+  };
   var onMainPinMove = function (evt) {
     evt.preventDefault();
 
@@ -80,6 +83,7 @@
   mainPin.addEventListener('mousedown', onMainPinMove);
 
   window.mainPin = {
-    getPosition: getPinPosition
+    getPosition: getPinPosition,
+    setToStart: setToStart
   };
 })();

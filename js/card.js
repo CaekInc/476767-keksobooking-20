@@ -27,15 +27,15 @@
     return imagesList;
   };
 
-  var renderCard = function (offerData) {
+  var renderCard = function (offerData, indexElement) {
     var cardElement = cardTemplate.cloneNode(true);
 
-    cardElement.setAttribute('data-id', offerData.offer.id);
+    cardElement.setAttribute('data-id', indexElement);
 
     cardElement.querySelector('.popup__title').textContent = offerData.offer.title;
     cardElement.querySelector('.popup__text--address').textContent = offerData.offer.address;
     cardElement.querySelector('.popup__text--price').textContent = offerData.offer.price + '₽/ночь';
-    cardElement.querySelector('.popup__type').textContent = offerData.offer.type.title;
+    cardElement.querySelector('.popup__type').textContent = window.data.OffersData.getTypeValue(offerData.offer.type, 'TITLE');
     cardElement.querySelector('.popup__text--capacity').textContent = offerData.offer.rooms + ' комнаты для ' + offerData.offer.guests + ' гостей';
     cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + offerData.offer.checkin + ' выезд до ' + offerData.offer.checkout;
     cardElement.querySelector('.popup__description').textContent = offerData.offer.description;

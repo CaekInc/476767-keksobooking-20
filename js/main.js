@@ -7,7 +7,7 @@
 
   var disablePage = function () {
     window.map.destroy();
-    window.form.destroy();
+    window.advertForm.destroy();
     isPageEnabled = false;
   };
   disablePage();
@@ -15,7 +15,7 @@
   var enablePage = function (evt) {
     if ((evt.key === 'Enter' || evt.button === 0) && !isPageEnabled) {
       window.map.init();
-      window.form.init();
+      window.advertForm.init();
       isPageEnabled = true;
     }
   };
